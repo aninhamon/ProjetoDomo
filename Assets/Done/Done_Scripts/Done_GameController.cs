@@ -9,24 +9,30 @@ public class Done_GameController : MonoBehaviour
 	public float spawnWait;
 	public float startWait;
 	public float waveWait;
+    public float timeStart;
 	
 	public GUIText scoreText;
 	public GUIText restartText;
 	public GUIText gameOverText;
-	
-	private bool gameOver;
+    public GUIText timeText;
+
+    private bool gameOver;
 	private bool restart;
 	private int score;
-	
-	void Start ()
+    private float timeCount;
+    //private Time timeCount;
+
+    void Start ()
 	{
 		gameOver = false;
 		restart = false;
 		restartText.text = "";
 		gameOverText.text = "";
 		score = 0;
+        timeCount = timeStart;
 		UpdateScore ();
-		StartCoroutine (SpawnWaves ());
+        UpdateTime();
+        StartCoroutine (SpawnWaves ());
 	}
 	
 	void Update ()
@@ -38,6 +44,15 @@ public class Done_GameController : MonoBehaviour
 				Application.LoadLevel (Application.loadedLevel);
 			}
 		}
+
+        if(timeCount > 0)
+        {
+            AddTime(-Time.deltaTime);
+        } else
+        {
+            timeCount = 0;
+            GameOver();
+        }
 	}
 	
 	IEnumerator SpawnWaves ()
@@ -74,8 +89,19 @@ public class Done_GameController : MonoBehaviour
 	{
 		scoreText.text = "Score: " + score;
 	}
-	
-	public void GameOver ()
+
+    public void AddTime(float newTimeValue)
+    {
+        timeCount += newTimeValue;
+        UpdateTime();
+    }
+
+    void UpdateTime()
+    {
+        timeText.text = "Time: " + Mathf.Round(timeCount);
+    }
+
+    public void GameOver ()
 	{
 		gameOverText.text = "Game Over!";
 		gameOver = true;
