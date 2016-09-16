@@ -4,11 +4,13 @@ using System.Collections;
 public class Done_GameController : MonoBehaviour
 {
 	public GameObject[] hazards;
-	public Vector3 spawnValues;
-	public int hazardCount;
-	public float spawnWait;
+    public GameObject[] bonuses;
+    public Vector3 spawnValues;
+    public Vector3 bonusValues;
+    //public int hazardCount;
+    public float spawnWait;
 	public float startWait;
-	public float waveWait;
+	//public float waveWait;
     public float timeStart;
 	
 	public GUIText scoreText;
@@ -60,15 +62,22 @@ public class Done_GameController : MonoBehaviour
 		yield return new WaitForSeconds (startWait);
 		while (true)
 		{
-			for (int i = 0; i < hazardCount; i++)
-			{
+            if(Random.Range(0, 10) == 1)
+            {
+                GameObject bonus = bonuses[Random.Range(0, bonuses.Length)];
+                Vector3 bonusPosition = new Vector3(Random.Range(-spawnValues.x, spawnValues.x), spawnValues.y, Random.Range((-spawnValues.z) / 3, spawnValues.z));
+                Quaternion bonusRotation = Quaternion.identity;
+                Instantiate(bonus, bonusPosition, bonusRotation);
+            }
+			//for (int i = 0; i < hazardCount; i++)
+			//{
 				GameObject hazard = hazards [Random.Range (0, hazards.Length)];
-				Vector3 spawnPosition = new Vector3 (Random.Range (-spawnValues.x, spawnValues.x), spawnValues.y, spawnValues.z);
+				Vector3 spawnPosition = new Vector3 (Random.Range (-spawnValues.x, spawnValues.x), spawnValues.y, Random.Range((-spawnValues.z)/3, spawnValues.z));
 				Quaternion spawnRotation = Quaternion.identity;
 				Instantiate (hazard, spawnPosition, spawnRotation);
 				yield return new WaitForSeconds (spawnWait);
-			}
-			yield return new WaitForSeconds (waveWait);
+			//}
+			//yield return new WaitForSeconds (waveWait);
 			
 			if (gameOver)
 			{

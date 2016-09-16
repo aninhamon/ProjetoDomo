@@ -12,8 +12,11 @@ public class Done_PlayerController : MonoBehaviour
 	public float speed;
 	public float tilt;
 	public Done_Boundary boundary;
+    public string fireButton = "Fire_P1";
+    public string horizontalButton = "Horizontal_P1";
+    public string verticalButton = "Vertical_P1";
 
-	public GameObject shot;
+    public GameObject shot;
 	public Transform shotSpawn;
 	public float fireRate;
 	 
@@ -21,7 +24,7 @@ public class Done_PlayerController : MonoBehaviour
 	
 	void Update ()
 	{
-		if (Input.GetButton("Fire1") && Time.time > nextFire) 
+		if (Input.GetButton(fireButton) && Time.time > nextFire) 
 		{
 			nextFire = Time.time + fireRate;
 			Instantiate(shot, shotSpawn.position, shotSpawn.rotation);
@@ -31,8 +34,8 @@ public class Done_PlayerController : MonoBehaviour
 
 	void FixedUpdate ()
 	{
-		float moveHorizontal = Input.GetAxis ("Horizontal");
-		float moveVertical = Input.GetAxis ("Vertical");
+		float moveHorizontal = Input.GetAxis (horizontalButton);
+		float moveVertical = Input.GetAxis (verticalButton);
 
 		Vector3 movement = new Vector3 (moveHorizontal, 0.0f, moveVertical);
 		GetComponent<Rigidbody>().velocity = movement * speed;
