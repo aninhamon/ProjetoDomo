@@ -7,6 +7,6 @@ public class Done_Mover : MonoBehaviour
 
 	void Start ()
 	{
-		GetComponent<Rigidbody>().velocity = -1* (transform.up * speed);
+		GetComponent<Rigidbody>().velocity = (transform.up * speed);
 	}
 }

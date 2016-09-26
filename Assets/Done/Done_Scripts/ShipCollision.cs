@@ -23,13 +23,13 @@ public class ShipCollision : MonoBehaviour {
 
     void OnTriggerEnter(Collider other)
     {
-        /*if (other.tag != "Enemy") //mudar a TAG dos aliens para Enemy
+        if (other.tag == "Enemy") //mudar a TAG dos aliens para Enemy
         {
-            return;
-        }*/
+            Instantiate(shipDamage, other.transform.position, other.transform.rotation);
+            gameController.AddTime(-timeDecrease);
+            Destroy(other.gameObject);
+        }
 
-        Instantiate(shipDamage, other.transform.position, other.transform.rotation);
-        gameController.AddTime(-timeDecrease);
-        Destroy(other.gameObject);
+        
     }
 }

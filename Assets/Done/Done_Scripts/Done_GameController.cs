@@ -72,8 +72,11 @@ public class Done_GameController : MonoBehaviour
 			//for (int i = 0; i < hazardCount; i++)
 			//{
 				GameObject hazard = hazards [Random.Range (0, hazards.Length)];
-				Vector3 spawnPosition = new Vector3 (Random.Range (-spawnValues.x, spawnValues.x), spawnValues.y, Random.Range((-spawnValues.z)/3, spawnValues.z));
-				Quaternion spawnRotation = Quaternion.identity;
+                Vector3 spawnPosition = setSpawnPosition();
+                //Vector3 spawnPosition = new Vector3 (Random.Range (Random.Range(-spawnValues.x,-15f), Random.Range(15f,spawnValues.x)), spawnValues.y, Random.Range(Random.Range((-spawnValues.z)/3, -15f), Random.Range(15f, spawnValues.z)));
+                //Vector3 spawnPosition = new Vector3(Random.Range(-10, 10), spawnValues.y, Random.Range((-spawnValues.z) / 3, spawnValues.z));
+                //Vector3 spawnPosition = new Vector3(-10.047f, spawnValues.y, -0.018f);
+            Quaternion spawnRotation = Quaternion.identity;
 				Instantiate (hazard, spawnPosition, spawnRotation);
 				yield return new WaitForSeconds (spawnWait);
 			//}
@@ -87,6 +90,26 @@ public class Done_GameController : MonoBehaviour
 			}
 		}
 	}
+
+    Vector3 setSpawnPosition()
+    {
+        Vector3 spawnPosition;
+        switch (Random.Range(1, 5))
+        {
+            case 1:
+                spawnPosition = new Vector3(Random.Range(5f, spawnValues.x), spawnValues.y, Random.Range(5f, spawnValues.z));
+                return spawnPosition;
+            case 2:
+                spawnPosition = new Vector3(Random.Range(-spawnValues.x, -5f), spawnValues.y, Random.Range(5f, spawnValues.z));
+                return spawnPosition; ;
+            case 3:
+                spawnPosition = new Vector3(Random.Range(-spawnValues.x, -5f), spawnValues.y, Random.Range(-spawnValues.z, -5f));
+                return spawnPosition; ;
+        }
+        spawnPosition = new Vector3(Random.Range(5f, spawnValues.x), spawnValues.y, Random.Range(-spawnValues.z, -5f));
+        return spawnPosition; ;
+        
+    }
 	
 	public void AddScore (int newScoreValue)
 	{
