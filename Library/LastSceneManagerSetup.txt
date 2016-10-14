@@ -1,4 +1,4 @@
 sceneSetups:
-- path: Assets/Done/Done_Scenes/Done_Main.unity
+- path: Assets/Done_Scenes/Start_Menu.unity
   isLoaded: 1
   isActive: 1

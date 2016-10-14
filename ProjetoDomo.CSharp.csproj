@@ -70,22 +70,25 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Attracted.cs" />
+    <Compile Include="Assets\Bolt_Mover.cs" />
     <Compile Include="Assets\Domemaster\5 Camera Rig\Scripts\DomeCamera.cs" />
     <Compile Include="Assets\Domemaster\5 Camera Rig\Scripts\Domemaster.cs" />
     <Compile Include="Assets\Domemaster\Camera Shader\DomemasterFisheye.cs" />
-    <Compile Include="Assets\Done\Done_Scripts\AdjustRotationForDome.cs" />
-    <Compile Include="Assets\Done\Done_Scripts\DestroyBonus0.cs" />
-    <Compile Include="Assets\Done\Done_Scripts\Done_BGScroller.cs" />
-    <Compile Include="Assets\Done\Done_Scripts\Done_DestroyByBoundary.cs" />
-    <Compile Include="Assets\Done\Done_Scripts\Done_DestroyByContact.cs" />
-    <Compile Include="Assets\Done\Done_Scripts\Done_DestroyByTime.cs" />
-    <Compile Include="Assets\Done\Done_Scripts\Done_EvasiveManeuver.cs" />
-    <Compile Include="Assets\Done\Done_Scripts\Done_GameController.cs" />
-    <Compile Include="Assets\Done\Done_Scripts\Done_Mover.cs" />
-    <Compile Include="Assets\Done\Done_Scripts\Done_PlayerController.cs" />
-    <Compile Include="Assets\Done\Done_Scripts\Done_RandomRotator.cs" />
-    <Compile Include="Assets\Done\Done_Scripts\Done_WeaponController.cs" />
-    <Compile Include="Assets\Done\Done_Scripts\ShipCollision.cs" />
+    <Compile Include="Assets\Done_Scripts\AdjustRotationForDome.cs" />
+    <Compile Include="Assets\Done_Scripts\ButtonManager.cs" />
+    <Compile Include="Assets\Done_Scripts\DestroyBonus0.cs" />
+    <Compile Include="Assets\Done_Scripts\Done_BGScroller.cs" />
+    <Compile Include="Assets\Done_Scripts\Done_DestroyByBoundary.cs" />
+    <Compile Include="Assets\Done_Scripts\Done_DestroyByContact.cs" />
+    <Compile Include="Assets\Done_Scripts\Done_DestroyByTime.cs" />
+    <Compile Include="Assets\Done_Scripts\Done_EvasiveManeuver.cs" />
+    <Compile Include="Assets\Done_Scripts\Done_GameController.cs" />
+    <Compile Include="Assets\Done_Scripts\Done_Mover.cs" />
+    <Compile Include="Assets\Done_Scripts\Done_PlayerController.cs" />
+    <Compile Include="Assets\Done_Scripts\Done_RandomRotator.cs" />
+    <Compile Include="Assets\Done_Scripts\Done_WeaponController.cs" />
+    <Compile Include="Assets\Done_Scripts\PlayVideo.cs" />
+    <Compile Include="Assets\Done_Scripts\ShipCollision.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Domemaster\Camera Shader\DomemasterFisheyeShader.shader" />
