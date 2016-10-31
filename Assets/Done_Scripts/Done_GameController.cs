@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine.SceneManagement;
 
 public class Done_GameController : MonoBehaviour
@@ -13,11 +14,15 @@ public class Done_GameController : MonoBehaviour
 	public float startWait;
 	//public float waveWait;
     public float timeStart;
+
+    public int partida; 
 	
-	public GUIText scoreText;
-	public GUIText restartText;
+	public TextMesh scoreText1;
+    public TextMesh scoreText2;
+    public GUIText restartText;
 	public GUIText gameOverText;
-    public GUIText timeText;
+    public TextMesh timeText1;
+    public TextMesh timeText2;
 
     private bool gameOver;
 	private bool restart;
@@ -36,6 +41,7 @@ public class Done_GameController : MonoBehaviour
 		UpdateScore ();
         UpdateTime();
         StartCoroutine (SpawnWaves ());
+        partida = 1;   
 	}
 	
 	void Update ()
@@ -43,10 +49,11 @@ public class Done_GameController : MonoBehaviour
 		if (restart)
 		{
 			if (Input.GetButtonDown("Reset"))
-			{
+			{                
 				Application.LoadLevel (Application.loadedLevel);
                 //SceneManager.LoadScene(SceneManager);
-			}
+                partida++;
+            }
 		}
 
         if(timeCount > 0)
@@ -81,6 +88,14 @@ public class Done_GameController : MonoBehaviour
             Quaternion spawnRotation = Quaternion.identity;
 				Instantiate (hazard, spawnPosition, spawnRotation);
 				yield return new WaitForSeconds (spawnWait);
+                if (spawnWait > 2f)
+                {
+                    spawnWait -= 1.5f;                
+                }
+                if (timeCount == 150)
+                {
+                    spawnWait = 1;
+                }
 			//}
 			//yield return new WaitForSeconds (waveWait);
 			
@@ -121,8 +136,9 @@ public class Done_GameController : MonoBehaviour
 	
 	void UpdateScore ()
 	{
-		scoreText.text = "Score: " + score;
-	}
+		scoreText1.text = ""+score;
+        scoreText2.text = "" + score;
+    }
 
     public void AddTime(float newTimeValue)
     {
@@ -132,12 +148,13 @@ public class Done_GameController : MonoBehaviour
 
     void UpdateTime()
     {
-        timeText.text = "Time: " + Mathf.Round(timeCount);
+        timeText1.text = "" + Mathf.Round(timeCount);
+        timeText2.text = "" + Mathf.Round(timeCount);
     }
 
     public void GameOver ()
 	{
 		gameOverText.text = "Game Over!";
-		gameOver = true;
+        gameOver = true;
 	}
 }

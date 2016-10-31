@@ -13,7 +13,7 @@ public class PlayVideo : MonoBehaviour
 
     public Transform canvas;
     public string nextScene;
-
+    
     // Use this for initialization
     void Start()
     {
@@ -21,13 +21,21 @@ public class PlayVideo : MonoBehaviour
         audio = GetComponent<AudioSource>();
         audio.clip = movie.audioClip;
         movie.Play();
-        audio.Play();
+        audio.Play();       
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetButtonDown("Pause") && movie.isPlaying)
+        StartCoroutine(ExecuteAfterTime(movie.duration));
+
+        if (Input.GetButtonDown("Submit"))
+        {
+            SceneManager.LoadScene(nextScene);
+        }
+
+        //A principio, tirei o pause
+        /*if (Input.GetButtonDown("Pause") && movie.isPlaying)
         {
             movie.Pause();
             canvas.gameObject.SetActive(true);
@@ -46,6 +54,13 @@ public class PlayVideo : MonoBehaviour
             }
             //canvas.gameObject.SetActive(false);
             //movie.Play();
-        }
+        }*/
+    }
+
+    IEnumerator ExecuteAfterTime(float time)
+    {
+        yield return new WaitForSeconds(time);
+
+        SceneManager.LoadScene(nextScene);
     }
 }
