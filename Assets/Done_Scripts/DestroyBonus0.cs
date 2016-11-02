@@ -35,6 +35,11 @@ public class DestroyBonus0 : MonoBehaviour
         }
 
         game0Controller.AddTime(timeBonus);
+        game0Controller.damageCount++;
+
+        if (game0Controller.damageCount > 4)
+            game0Controller.GetComponent<AudioSource>().volume = 10f;
+
         Destroy(other.gameObject);
         Destroy(gameObject);
     }

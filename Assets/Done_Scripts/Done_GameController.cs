@@ -14,7 +14,11 @@ public class Done_GameController : MonoBehaviour
 	public float startWait;
 	//public float waveWait;
     public float timeStart;
+    public AudioClip gameOverSound;
+    public AudioClip youWinSound;
+    public AudioClip dangerSound;
 
+    public int damageCount;
     public int partida; 
 	
 	public TextMesh scoreText1;
@@ -24,10 +28,11 @@ public class Done_GameController : MonoBehaviour
     public TextMesh timeText1;
     public TextMesh timeText2;
 
-    private bool gameOver;
+    public bool gameOver;
 	private bool restart;
 	private int score;
     private float timeCount;
+    private Vector3 soundPos;
     //private Time timeCount;
 
     void Start ()
@@ -41,71 +46,86 @@ public class Done_GameController : MonoBehaviour
 		UpdateScore ();
         UpdateTime();
         StartCoroutine (SpawnWaves ());
-        partida = 1;   
-	}
+        partida = 1;
+        GetComponent<AudioSource>().volume = 10f;
+    }
 	
 	void Update ()
 	{
 		if (restart)
 		{
-			if (Input.GetButtonDown("Reset"))
+            if (Input.GetButtonDown("Reset"))
 			{                
-				Application.LoadLevel (Application.loadedLevel);
-                //SceneManager.LoadScene(SceneManager);
+				//Application.LoadLevel (Application.loadedLevel);
+                SceneManager.LoadScene("Done_Main");
                 partida++;
             }
 		}
 
         if(timeCount > 0)
         {
-            AddTime(-Time.deltaTime);
+            if (!gameOver) {
+                AddTime(-Time.deltaTime);
+                print(damageCount);
+                if (damageCount <= 0)
+                {
+                    //AudioSource.Destroy(dangerSound);
+                    GameOver();
+                } else if (damageCount < 5)
+                {
+                    GetComponent<AudioSource>().volume = 0.1f;
+                    soundPos = new Vector3(0, 0);
+                    AudioSource.PlayClipAtPoint(dangerSound, soundPos);
+                }
+            }
+            
         } else
         {
             timeCount = 0;
-            GameOver();
+            YouWin();
         }
 	}
 	
 	IEnumerator SpawnWaves ()
 	{
 		yield return new WaitForSeconds (startWait);
-		while (true)
-		{
-            if(Random.Range(0, 10) == 1)
+        while (!gameOver)
+        {
+            if (Random.Range(0, 20) == 1)
             {
                 GameObject bonus = bonuses[Random.Range(0, bonuses.Length)];
                 Vector3 bonusPosition = new Vector3(Random.Range(-spawnValues.x, spawnValues.x), spawnValues.y, Random.Range((-spawnValues.z) / 3, spawnValues.z));
                 Quaternion bonusRotation = Quaternion.identity;
                 Instantiate(bonus, bonusPosition, bonusRotation);
             }
-			//for (int i = 0; i < hazardCount; i++)
-			//{
-				GameObject hazard = hazards [Random.Range (0, hazards.Length)];
-                Vector3 spawnPosition = setSpawnPosition();
-                //Vector3 spawnPosition = new Vector3 (Random.Range (Random.Range(-spawnValues.x,-15f), Random.Range(15f,spawnValues.x)), spawnValues.y, Random.Range(Random.Range((-spawnValues.z)/3, -15f), Random.Range(15f, spawnValues.z)));
-                //Vector3 spawnPosition = new Vector3(Random.Range(-10, 10), spawnValues.y, Random.Range((-spawnValues.z) / 3, spawnValues.z));
-                //Vector3 spawnPosition = new Vector3(-10.047f, spawnValues.y, -0.018f);
+            //for (int i = 0; i < hazardCount; i++)
+            //{
+            GameObject hazard = hazards[Random.Range(0, hazards.Length)];
+            Vector3 spawnPosition = setSpawnPosition();
+            //Vector3 spawnPosition = new Vector3 (Random.Range (Random.Range(-spawnValues.x,-15f), Random.Range(15f,spawnValues.x)), spawnValues.y, Random.Range(Random.Range((-spawnValues.z)/3, -15f), Random.Range(15f, spawnValues.z)));
+            //Vector3 spawnPosition = new Vector3(Random.Range(-10, 10), spawnValues.y, Random.Range((-spawnValues.z) / 3, spawnValues.z));
+            //Vector3 spawnPosition = new Vector3(-10.047f, spawnValues.y, -0.018f);
             Quaternion spawnRotation = Quaternion.identity;
-				Instantiate (hazard, spawnPosition, spawnRotation);
-				yield return new WaitForSeconds (spawnWait);
-                if (spawnWait > 2f)
-                {
-                    spawnWait -= 1.5f;                
-                }
-                if (timeCount == 150)
-                {
-                    spawnWait = 1;
-                }
-			//}
-			//yield return new WaitForSeconds (waveWait);
-			
-			if (gameOver)
-			{
-				restartText.text = "Press 'R' or 'Back' for Restart";
-				restart = true;
-				break;
-			}
+            Instantiate(hazard, spawnPosition, spawnRotation);
+            yield return new WaitForSeconds(spawnWait);
+            if (spawnWait > 2f)
+            {
+                spawnWait -= 1.5f;
+            }
+            if (timeCount == 150)
+            {
+                spawnWait = 1;
+            }
+            //}
+            //yield return new WaitForSeconds (waveWait);
+        }
+		if (gameOver)
+		{
+			restartText.text = "Press 'R' or 'Back' for Restart";
+			restart = true;
+			//break;
 		}
+		
 	}
 
     Vector3 setSpawnPosition()
@@ -154,7 +174,20 @@ public class Done_GameController : MonoBehaviour
 
     public void GameOver ()
 	{
-		gameOverText.text = "Game Over!";
+        AudioSource.Destroy(dangerSound);
         gameOver = true;
-	}
+        gameOverText.text = "Game Over!";
+        GetComponent<AudioSource>().Pause();
+        soundPos = new Vector3(0, 0);
+        AudioSource.PlayClipAtPoint(gameOverSound, soundPos);
+    }
+
+    public void YouWin()
+    {
+        gameOverText.text = "You Survived!";
+        gameOver = true;
+        GetComponent<AudioSource>().Pause();
+        soundPos = new Vector3(0, 0);
+        AudioSource.PlayClipAtPoint(youWinSound, soundPos);
+    }
 }

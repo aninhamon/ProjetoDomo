@@ -23,7 +23,7 @@ public class Done_DestroyByContact : MonoBehaviour
 
 	void OnTriggerEnter (Collider other)
 	{
-		if (other.tag == "Boundary" || other.tag == "Enemy")
+		if (other.tag == "Boundary" || other.tag == "Enemy" || other.tag == "Bonus")
 		{
 			return;
 		}

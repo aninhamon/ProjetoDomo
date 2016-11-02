@@ -3,7 +3,7 @@ using System.Collections;
 
 public class ShipCollision : MonoBehaviour {
 
-    public GameObject explosion;
+    //public GameObject explosion;
     public GameObject shipDamage;
     public int timeDecrease;
     private Done_GameController gameController;
@@ -23,10 +23,16 @@ public class ShipCollision : MonoBehaviour {
 
     void OnTriggerEnter(Collider other)
     {
-        if (other.tag == "Enemy") //mudar a TAG dos aliens para Enemy
+        if (other.tag == "Enemy")
         {
             Instantiate(shipDamage, other.transform.position, other.transform.rotation);
             gameController.AddTime(-timeDecrease);
+
+            if (!gameController.gameOver)
+                gameController.damageCount--;
+            else
+                Destroy(this);
+
             Destroy(other.gameObject);
         }
        if (other.tag == "Bonus") 
