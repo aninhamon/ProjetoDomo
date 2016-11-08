@@ -25,7 +25,7 @@ public class Done_PlayerController : MonoBehaviour
 
     private void Start()
     {
-        sc = new SphericalCoordinates(transform.position, 2.7f, 4.3f, 0f, Mathf.PI * 2f, 0f, Mathf.PI / 4f);
+        sc = new SphericalCoordinates(transform.position, 1f, 4.3f, 0f, Mathf.PI * 2f, 0f, Mathf.PI / 4f);
         // Initialize position
         transform.position = sc.toCartesian + pivot.position;
     }
@@ -37,7 +37,6 @@ public class Done_PlayerController : MonoBehaviour
             nextFire = Time.time + fireRate;
             Instantiate(shot, shotSpawn.position, shotSpawn.rotation);
             GetComponent<AudioSource>().Play();
-            Destroy(shot, 0.5f);
         }
     }
 
@@ -62,7 +61,7 @@ public class Done_PlayerController : MonoBehaviour
         {
             if(Input.GetAxis(verticalButton) > 0)
             {
-                if (sc.radius > 2.7f)
+                if (sc.radius > 1f)
                 {
                     sc.SetRadius(sc.radius - 0.1f);
                 }

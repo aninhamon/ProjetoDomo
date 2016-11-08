@@ -2,6 +2,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.SceneManagement;
+using System.IO;
+using UnityEngine.UI;
 
 public class Done_GameController : MonoBehaviour
 {
@@ -13,10 +15,7 @@ public class Done_GameController : MonoBehaviour
     public float spawnWait;
 	public float startWait;
 	//public float waveWait;
-    public float timeStart;
-    public AudioClip gameOverSound;
-    public AudioClip youWinSound;
-    public AudioClip dangerSound;
+    public float timeStart;   
 
     public int damageCount;
     public int partida; 
@@ -24,23 +23,28 @@ public class Done_GameController : MonoBehaviour
 	public TextMesh scoreText1;
     public TextMesh scoreText2;
     public GUIText restartText;
-	public GUIText gameOverText;
+	//public TextMesh gameOverText;
     public TextMesh timeText1;
     public TextMesh timeText2;
+    public Text gameOverText1;
+    public Text gameOverText2;
 
     public bool gameOver;
+    private bool win;
+    private bool salvo;
 	private bool restart;
 	private int score;
     private float timeCount;
-    private Vector3 soundPos;
+    private bool isDangerPlaying;
     //private Time timeCount;
 
     void Start ()
 	{
 		gameOver = false;
+        win = false;
 		restart = false;
 		restartText.text = "";
-		gameOverText.text = "";
+		//gameOverText.text = "";
 		score = 0;
         timeCount = timeStart;
 		UpdateScore ();
@@ -48,6 +52,9 @@ public class Done_GameController : MonoBehaviour
         StartCoroutine (SpawnWaves ());
         partida = 1;
         GetComponent<AudioSource>().volume = 10f;
+        salvo = false;
+        isDangerPlaying = false;
+        GameObject.FindGameObjectWithTag("DangerScreen").transform.position = new Vector3(0.07f, 40, 0);
     }
 	
 	void Update ()
@@ -60,29 +67,45 @@ public class Done_GameController : MonoBehaviour
                 SceneManager.LoadScene("Done_Main");
                 partida++;
             }
-		}
-
-        if(timeCount > 0)
-        {
-            if (!gameOver) {
-                AddTime(-Time.deltaTime);
-                print(damageCount);
-                if (damageCount <= 0)
-                {
-                    //AudioSource.Destroy(dangerSound);
-                    GameOver();
-                } else if (damageCount < 5)
-                {
-                    GetComponent<AudioSource>().volume = 0.1f;
-                    soundPos = new Vector3(0, 0);
-                    AudioSource.PlayClipAtPoint(dangerSound, soundPos);
-                }
+            if (Input.GetButtonDown("BackMenu"))
+            {
+                //Application.LoadLevel (Application.loadedLevel);
+                SceneManager.LoadScene("Start_Menu");
+                partida++;
             }
-            
-        } else
+        }
+
+        if (!gameOver && !win)
         {
-            timeCount = 0;
-            YouWin();
+            if (timeCount > 0)
+            {
+                if (!gameOver)
+                {
+                    AddTime(-Time.deltaTime);
+                    print(damageCount);
+                    if (damageCount <= 0)
+                    {
+                        GameOver();
+                    }
+                    else if (damageCount < 3)
+                    {
+
+                        if (!isDangerPlaying)
+                        {
+                            GetComponent<AudioSource>().volume = 0.2f;
+                            GameObject.FindGameObjectWithTag("Danger").GetComponent<AudioSource>().Play();
+                            isDangerPlaying = true;
+                            GameObject.FindGameObjectWithTag("DangerScreen").transform.position = new Vector3(0.07f, 11, 0);
+                        }
+                    }
+                }
+
+            }
+            else
+            {
+                timeCount = 0;                
+                YouWin();
+            }
         }
 	}
 	
@@ -174,20 +197,67 @@ public class Done_GameController : MonoBehaviour
 
     public void GameOver ()
 	{
-        AudioSource.Destroy(dangerSound);
         gameOver = true;
-        gameOverText.text = "Game Over!";
-        GetComponent<AudioSource>().Pause();
-        soundPos = new Vector3(0, 0);
-        AudioSource.PlayClipAtPoint(gameOverSound, soundPos);
+        //gameOverText.text = "Game Over!";
+        gameOverText1.text = "Game Over!";
+        gameOverText2.text = "Game Over!";
+        if (isDangerPlaying) {
+            GameObject.FindGameObjectWithTag("Danger").GetComponent<AudioSource>().Pause();
+        }
+
+        GameObject.FindGameObjectWithTag("GameOver").GetComponent<AudioSource>().Play();
+
+        if (!salvo)
+        {
+            if (!File.Exists("ranking.txt"))
+            {
+                TextWriter tw = new StreamWriter("ranking.txt");
+                tw.WriteLine("Partida " + partida + " - " + score + "pontos.");
+                tw.Close();
+            }
+            else if (File.Exists("ranking.txt"))
+            {
+                TextWriter tw = new StreamWriter("ranking.txt", true);
+                tw.WriteLine("Partida " + partida + " - " + score + " pontos.");
+                tw.Close();
+            }
+            salvo = true;
+        }
     }
 
     public void YouWin()
     {
-        gameOverText.text = "You Survived!";
+        win = true;
+        //gameOverText.text = "You Survived!";
+        gameOverText1.text = "You Survived!";
+        gameOverText2.text = "You Survived!";
         gameOver = true;
+        GameObject.FindGameObjectWithTag("DangerScreen").transform.position = new Vector3(0.07f, 40, 0);
         GetComponent<AudioSource>().Pause();
-        soundPos = new Vector3(0, 0);
-        AudioSource.PlayClipAtPoint(youWinSound, soundPos);
+        if (isDangerPlaying)
+        {
+            GameObject.FindGameObjectWithTag("Danger").GetComponent<AudioSource>().Pause();
+        }
+
+        //GameObject.FindGameObjectWithTag("GameOver").GetComponent<AudioSource>().Play();
+
+        GameObject.FindGameObjectWithTag("YouWinTag").GetComponent<AudioSource>().Play();
+
+        if (!salvo)
+        {
+            if (!File.Exists("ranking.txt"))
+            {
+                TextWriter tw = new StreamWriter("ranking.txt");
+                tw.WriteLine("Partida " + partida + " - " + score + "pontos.");
+                tw.Close();
+            }
+            else if (File.Exists("ranking.txt"))
+            {
+                TextWriter tw = new StreamWriter("ranking.txt", true);
+                tw.WriteLine("Partida " + partida + " - " + score + " pontos.");
+                tw.Close();
+            }
+            salvo = true;
+        }
     }
 }

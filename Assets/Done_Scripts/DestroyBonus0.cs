@@ -6,7 +6,7 @@ using System.Collections;
 public class DestroyBonus0 : MonoBehaviour
 {
     public GameObject bonus0Explosion;
-    public float timeBonus;
+    public int scoreBonus;
     private Done_GameController game0Controller;
 
     void Start()
@@ -34,7 +34,7 @@ public class DestroyBonus0 : MonoBehaviour
             Instantiate(bonus0Explosion, transform.position, transform.rotation);
         }
 
-        game0Controller.AddTime(timeBonus);
+        game0Controller.AddScore(scoreBonus);
         game0Controller.damageCount++;
 
         if (game0Controller.damageCount > 4)
