@@ -25,15 +25,17 @@ public class ShipCollision : MonoBehaviour {
     {
         if (other.tag == "Enemy")
         {
-            Instantiate(shipDamage, other.transform.position, other.transform.rotation);
-            gameController.AddTime(-timeDecrease);
-
             if (!gameController.gameOver)
+            {
+                Instantiate(shipDamage, other.transform.position, other.transform.rotation);
+                gameController.AddTime(-timeDecrease);
                 gameController.damageCount--;
-            else
-                Destroy(this);
+                Destroy(other.gameObject);
+            }
+            //else
+                //Destroy(this);
 
-            Destroy(other.gameObject);
+            
         }
        if (other.tag == "Bonus") 
         {

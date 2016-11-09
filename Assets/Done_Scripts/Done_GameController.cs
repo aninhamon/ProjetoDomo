@@ -34,7 +34,7 @@ public class Done_GameController : MonoBehaviour
     private bool salvo;
 	private bool restart;
 	private int score;
-    private float timeCount;
+    public float timeCount;
     private bool isDangerPlaying;
     //private Time timeCount;
 
@@ -85,6 +85,7 @@ public class Done_GameController : MonoBehaviour
                     print(damageCount);
                     if (damageCount <= 0)
                     {
+                        timeCount = 0;
                         GameOver();
                     }
                     else if (damageCount < 3)
@@ -228,6 +229,7 @@ public class Done_GameController : MonoBehaviour
     public void YouWin()
     {
         win = true;
+        AddScore(200);
         //gameOverText.text = "You Survived!";
         gameOverText1.text = "You Survived!";
         gameOverText2.text = "You Survived!";
